@@ -10,9 +10,21 @@ function Cura:Parse(GCode)
 	if fbegin ~= nil then
 		Info.LayerChange = true
 		Info.Number = tonumber(string.sub(GCode,fend+1))
-	elseif (GCode:sub(1,1) == "T") then
+		return Info
+	end
+	
+	if (GCode:sub(1,1) == "T") then
 		Info.ToolChange = true
 		Info.Number = tonumber(GCode:sub(2))
+		return Info
+	end
+	
+	fbegin,fend = string.find(GCode, ";LAYER_COUNT:")
+	
+	if fbegin ~= nil then
+		Info.LayerCount = true
+		Info.Number = tonumber(string.sub(GCode,fend+1))
+		return Info
 	end
 	
 	return Info
